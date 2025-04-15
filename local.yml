@@ -22,13 +22,13 @@
     become_user: michael
     dconf:
       key: "/org/gnome/desktop/background/picture-uri"
-      value: "'file://usr/share/backgrounds/ansible-wallpaper.jpg'"
+      value: "'file:///usr/share/backgrounds/ansible-wallpaper.jpg'"
 
   - name: set wallpaper dark
     become_user: michael
     dconf:
       key: "/org/gnome/desktop/background/picture-uri-dark"
-      value: "'file://usr/share/backgrounds/ansible-wallpaper.jpg'"
+      value: "'file:///usr/share/backgrounds/ansible-wallpaper.jpg'"
 
   - name: set wallpaper position
     dconf:
