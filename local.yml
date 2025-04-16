@@ -41,3 +41,9 @@
       dest: /home/michael/.bashrc
       owner: michael
       group: michael
+
+- hosts: localhost
+  connection: local
+  become: true
+  roles:
+    -  lazyvim
