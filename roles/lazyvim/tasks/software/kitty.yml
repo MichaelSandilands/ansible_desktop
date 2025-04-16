@@ -1,62 +1,85 @@
 ---
+- name: Set developer home path
+  set_fact:
+    developer_home: "/home/{{ developer_user }}"
+
 - name: Download and run kitty installer script
   ansible.builtin.shell: |
     curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
   args:
     executable: /bin/bash
   environment:
-    HOME: "{{ ansible_env.HOME }}"
-  changed_when: false  # prevent task from always appearing changed unless you handle idempotency
+    HOME: "{{ developer_home }}"
+  become: false  # run as the developer user
+  become_user: "{{ developer_user }}"
+  changed_when: false
 
 - name: Ensure ~/.local/bin exists
   ansible.builtin.file:
-    path: "{{ ansible_env.HOME }}/.local/bin"
+    path: "{{ developer_home }}/.local/bin"
     state: directory
     mode: '0755'
+  become: true
+  become_user: "{{ developer_user }}"
 
 - name: Symlink kitty and kitten to ~/.local/bin
   ansible.builtin.file:
-    src: "{{ ansible_env.HOME }}/.local/kitty.app/bin/{{ item }}"
-    dest: "{{ ansible_env.HOME }}/.local/bin/{{ item }}"
+    src: "{{ developer_home }}/.local/kitty.app/bin/{{ item }}"
+    dest: "{{ developer_home }}/.local/bin/{{ item }}"
     state: link
     force: true
   loop:
     - kitty
     - kitten
+  become: true
+  become_user: "{{ developer_user }}"
 
 - name: Ensure ~/.local/share/applications exists
   ansible.builtin.file:
-    path: "{{ ansible_env.HOME }}/.local/share/applications"
+    path: "{{ developer_home }}/.local/share/applications"
     state: directory
     mode: '0755'
+  become: true
+  become_user: "{{ developer_user }}"
 
 - name: Copy kitty.desktop
   ansible.builtin.copy:
-    src: "{{ ansible_env.HOME }}/.local/kitty.app/share/applications/kitty.desktop"
-    dest: "{{ ansible_env.HOME }}/.local/share/applications/kitty.desktop"
+    src: "{{ developer_home }}/.local/kitty.app/share/applications/kitty.desktop"
+    dest: "{{ developer_home }}/.local/share/applications/kitty.desktop"
     remote_src: true
+  become: true
+  become_user: "{{ developer_user }}"
 
 - name: Copy kitty-open.desktop
   ansible.builtin.copy:
-    src: "{{ ansible_env.HOME }}/.local/kitty.app/share/applications/kitty-open.desktop"
-    dest: "{{ ansible_env.HOME }}/.local/share/applications/kitty-open.desktop"
+    src: "{{ developer_home }}/.local/kitty.app/share/applications/kitty-open.desktop"
+    dest: "{{ developer_home }}/.local/share/applications/kitty-open.desktop"
     remote_src: true
+  become: true
+  become_user: "{{ developer_user }}"
 
 - name: Update icon path in kitty desktop files
   ansible.builtin.shell: |
-    sed -i "s|Icon=kitty|Icon=$(readlink -f {{ ansible_env.HOME }}/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png)|g" {{ ansible_env.HOME }}/.local/share/applications/kitty*.desktop
+    sed -i "s|Icon=kitty|Icon=$(readlink -f {{ developer_home }}/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png)|g" {{ developer_home }}/.local/share/applications/kitty*.desktop
   args:
     executable: /bin/bash
+  become: true
+  become_user: "{{ developer_user }}"
 
 - name: Update exec path in kitty desktop files
   ansible.builtin.shell: |
-    sed -i "s|Exec=kitty|Exec=$(readlink -f {{ ansible_env.HOME }}/.local/kitty.app/bin/kitty)|g" {{ ansible_env.HOME }}/.local/share/applications/kitty*.desktop
+    sed -i "s|Exec=kitty|Exec=$(readlink -f {{ developer_home }}/.local/kitty.app/bin/kitty)|g" {{ developer_home }}/.local/share/applications/kitty*.desktop
   args:
     executable: /bin/bash
+  become: true
+  become_user: "{{ developer_user }}"
 
 - name: Set kitty as default terminal for xdg-terminal-exec
   ansible.builtin.copy:
     content: "kitty.desktop\n"
-    dest: "{{ ansible_env.HOME }}/.config/xdg-terminals.list"
+    dest: "{{ developer_home }}/.config/xdg-terminals.list"
     mode: '0644'
+  when: set_kitty_as_default | default(false)
+  become: true
+  become_user: "{{ developer_user }}"
 
