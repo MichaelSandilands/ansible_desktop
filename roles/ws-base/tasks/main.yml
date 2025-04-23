@@ -24,3 +24,8 @@
     state: latest
     update_cache: true
   when: ansible_facts['os_family'] == "RedHat"
+
+- name: Autoremove unneeded RedHat packages installed as dependencies 
+  ansible.builtin.dnf5:
+    autoremove: yes
+  when: ansible_facts['os_family'] == "RedHat"
