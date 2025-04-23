@@ -1,0 +1,32 @@
+# roles/ws-base/vars/main.yml
+base_packages:
+  Archlinux:
+    - htop
+    - tmux
+    - openssh
+    - git
+    - make
+    - unzip
+    - base-devel
+    - ripgrep
+    - xclip
+  Debian:
+    - htop
+    - tmux
+    - openssh-client
+    - git
+    - make
+    - unzip
+    - build-essential
+    - ripgrep
+    - xclip
+  RedHat:
+    - htop
+    - tmux
+    - openssh
+    - git
+    - make
+    - unzip
+    - @development-tools
+    - ripgrep
+    - xclip

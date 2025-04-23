@@ -1,0 +1,30 @@
+# roles/ws-base/tasks/assets/nerd_font.yml
+- name: Create local fonts directory
+  ansible.builtin.file:
+    path: /usr/local/share/fonts/nerd-fonts
+    state: directory
+    mode: '0755'
+
+- name: Download FiraCode Nerd Font
+  ansible.builtin.get_url:
+    url: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/FiraCode.zip
+    dest: /tmp/FiraCode.zip
+    mode: '0644'
+
+- name: Unzip Firacode Nerd Font into system fonts directory
+  ansible.builtin.unarchive:
+    src: /tmp/FiraCode.zip
+    dest: /usr/local/share/fonts/nerd-fonts/
+    remote_src: yes
+
+- name: Set correct permissions on font files
+  ansible.builtin.file:
+    path: /usr/local/share/fonts/nerd-fonts
+    state: directory
+    recurse: yes
+    mode: '0644'
+
+- name: Rebuild font cache
+  ansible.builtin.command: fc-cache -fv
+  changed_when: false
+

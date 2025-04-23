@@ -35,3 +35,17 @@
   ansible.builtin.dnf5:
     autoremove: yes
   when: ansible_facts['os_family'] == "RedHat"
+
+- name: Install base packages
+  tags: always
+  ansible.builtin.package:
+    name: "{{ base_packages[ansible_facts['os_family']] }}"
+    state: latest
+
+- name: Install FiraCode Nerd Font
+  ansible.builtin.import_tasks: assets/nerd_font.yml
+
+- name: Install Neovim
+  ansible.builtin.import_tasks: software/neovim.yml
+  tags: neovim
+
