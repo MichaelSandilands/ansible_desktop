@@ -1,21 +1,19 @@
 # roles/ws-base/tasks/main.yml
-- hosts: local
+- name: Run the equivalent of "pacman -Syu"
   tags: always
-  become: true
-  pre_tasks:
-  - name: Run the equivalent of "pacman -Syu"
-    tags: always
-    community.general.pacman:
-      update_cache: true
-      upgrade: true
-    when: ansible_facts['os_family'] == "Archlinux"
+  community.general.pacman:
+    update_cache: true
+    upgrade: true
+    name: "*"
+    state: latest
+  when: ansible_facts['os_family'] == "Archlinux"
 
-  - name: Run the equivalent of "apt-get update" and "apt-get dist-upgrade" and "apt-get upgrade"
-    tags: always
-    ansible.builtin.apt:
-      update_cache: yes
-      upgrade: dist
-      name: "*"
-      state: latest
-    when: ansible_facts['os_family'] == "Debian"
+- name: Run the equivalent of "apt-get update" and "apt-get dist-upgrade" and "apt-get upgrade"
+  tags: always
+  ansible.builtin.apt:
+    update_cache: yes
+    upgrade: dist
+    name: "*"
+    state: latest
+  when: ansible_facts['os_family'] == "Debian"
 
