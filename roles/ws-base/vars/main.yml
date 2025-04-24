@@ -11,6 +11,7 @@ base_packages:
     - ripgrep
     - xclip
     - curl
+    - lua
   Debian:
     - htop
     - tmux
@@ -22,6 +23,7 @@ base_packages:
     - ripgrep
     - xclip
     - curl
+    - lua5.4
   RedHat:
     - htop
     - tmux
@@ -33,4 +35,5 @@ base_packages:
     - ripgrep
     - xclip
     - curl
+    - lua5.4
 
