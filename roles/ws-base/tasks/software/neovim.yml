@@ -4,7 +4,7 @@
 # == Ubuntu / Pop!_OS / TUXEDO OS ==
 - name: Add Neovim PPA on Ubuntu-family systems
   ansible.builtin.apt_repository:
-    repo: ppa:neovim-ppa/unstable
+    repo: ppa:neovim-ppa/stable
   when: ansible_facts['distribution'] in ['Ubuntu', 'Pop!_OS', 'TUXEDO OS']
 
 - name: Install Neovim and dependencies on Ubuntu-family systems
