@@ -54,4 +54,3 @@
 - name: Install Neovim
   ansible.builtin.import_tasks: software/neovim.yml
   tags: neovim
-
