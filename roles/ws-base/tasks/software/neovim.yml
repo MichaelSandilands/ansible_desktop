@@ -39,7 +39,7 @@
 - name: Ensure Neovim is in the PATH (optional symlink)
   file:
     src: /opt/nvim-linux64/bin/nvim
-    dest: /usr/local/bin/nvim
+    dest: /usr/bin/nvim
     state: link
     force: yes
   when: ansible_facts['os_family'] == "Debian"
