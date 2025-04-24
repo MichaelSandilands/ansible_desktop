@@ -92,13 +92,13 @@
 # == Neovim Kickstart ==
 - name: Ensure Neovim config directory exists
   ansible.builtin.file:
-    path: "{{ lookup('env', 'XDG_CONFIG_HOME') }}/nvim"
+    path: "/home/michael/.config/nvim"
     state: directory
     mode: '0755'
 
 - name: Clone kickstart.nvim into Neovim config
   ansible.builtin.git:
     repo: https://github.com/MichaelSandilands/kickstart.nvim.git
-    dest: "{{ lookup('env', 'XDG_CONFIG_HOME') }}/nvim"
+    dest: "/home/michael/.config/nvim"
     version: HEAD
     update: yes
