@@ -12,7 +12,11 @@
     remote_src: yes
 
 - name: Build and install LuaRocks
-  ansible.builtin.command: ./configure && make && make install
+  become: true
+  ansible.builtin.shell: |
+    ./configure
+    make
+    make install
   args:
     chdir: /tmp/luarocks-3.11.1
     creates: /usr/local/bin/luarocks
