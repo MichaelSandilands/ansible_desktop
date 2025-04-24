@@ -10,6 +10,7 @@ base_packages:
     - base-devel
     - ripgrep
     - xclip
+    - curl
   Debian:
     - htop
     - tmux
@@ -20,6 +21,7 @@ base_packages:
     - build-essential
     - ripgrep
     - xclip
+    - curl
   RedHat:
     - htop
     - tmux
@@ -30,3 +32,5 @@ base_packages:
     - '@Development tools'
     - ripgrep
     - xclip
+    - curl
+
