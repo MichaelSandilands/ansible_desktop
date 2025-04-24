@@ -8,11 +8,17 @@
     state: latest
   when: ansible_facts['os_family'] == "Archlinux"
 
-- name: Run the equivalent of "apt-get update" and "apt-get dist-upgrade" and "apt-get upgrade"
+- name: Run the equivalent of "apt-get update" and "apt-get dist-upgrade"
   tags: always
   ansible.builtin.apt:
     update_cache: yes
     upgrade: dist
+  when: ansible_facts['os_family'] == "Debian"
+
+- name: Run the equivalent of "apt-get upgrade"
+  tags: always
+  ansible.builtin.apt:
+    update_cache: yes
     name: "*"
     state: latest
   when: ansible_facts['os_family'] == "Debian"
