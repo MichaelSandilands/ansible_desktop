@@ -16,33 +16,23 @@
     state: present
   when: ansible_facts['os_family'] == "Debian"
 
-- name: Download latest Neovim release
-  ansible.builtin.get_url:
-    url: https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
-    dest: /tmp/nvim-linux-x86_64.tar.gz
-    mode: '0644'
-  when: ansible_facts['os_family'] == "Debian"
-
-- name: Remove existing Neovim directory
+- name: Ensure /opt/nvim directory exists
   ansible.builtin.file:
     path: /opt/nvim
-    state: absent
-  when: ansible_facts['os_family'] == "Debian"
+    state: directory
+    mode: '0755'
 
-- name: Extract Neovim archive to /opt
-  ansible.builtin.unarchive:
-    src: /tmp/nvim-linux-x86_64.tar.gz
-    dest: /opt
-    remote_src: yes
-  when: ansible_facts['os_family'] == "Debian"
-
-- name: Ensure Neovim is in the PATH (optional symlink)
-  file:
-    src: /opt/nvim-linux64/bin/nvim
-    dest: /usr/bin/nvim
-    state: link
+- name: Download Neovim AppImage
+  ansible.builtin.get_url:
+    url: https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.appimage
+    dest: /opt/nvim
+    mode: '0755'
     force: yes
-  when: ansible_facts['os_family'] == "Debian"
+
+- name: Ensure /opt/nvim is in the global PATH (bashrc.d)
+  lineinfile:
+    path: "/home/michael/.bashrc"
+    line: export PATH="$PATH:/opt/nvim/"
 
 # == Fedora ==
 - name: Install Neovim and dependencies on Fedora
