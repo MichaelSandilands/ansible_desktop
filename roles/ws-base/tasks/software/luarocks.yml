@@ -1,0 +1,24 @@
+---
+- name: Download LuaRocks source archive
+  ansible.builtin.get_url:
+    url: https://luarocks.org/releases/luarocks-3.11.1.tar.gz
+    dest: /tmp/luarocks-3.11.1.tar.gz
+    mode: '0644'
+
+- name: Extract LuaRocks
+  ansible.builtin.unarchive:
+    src: /tmp/luarocks-3.11.1.tar.gz
+    dest: /tmp/
+    remote_src: yes
+
+- name: Build and install LuaRocks
+  ansible.builtin.command: ./configure && make && make install
+  args:
+    chdir: /tmp/luarocks-3.11.1
+    creates: /usr/local/bin/luarocks
+
+- name: Install luasocket using luarocks
+  ansible.builtin.command: luarocks install luasocket
+  args:
+    creates: /usr/local/lib/luarocks/rocks-5.4/luasocket
+

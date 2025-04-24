@@ -46,3 +46,7 @@
 - name: Install Neovim
   ansible.builtin.import_tasks: software/neovim.yml
   tags: neovim
+
+- name: Install luarocks
+  ansible.builtin.import_tasks: software/luarocks.yml
+  tags: luarocks
