@@ -23,7 +23,7 @@ base_packages:
     - ripgrep
     - xclip
     - curl
-    - lua5.4
+    - liblua5.4-dev
     - software-properties-common
   RedHat:
     - htop
@@ -36,5 +36,5 @@ base_packages:
     - ripgrep
     - xclip
     - curl
-    - lua5.4
+    - lua-devel
 
