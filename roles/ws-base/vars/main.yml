@@ -27,6 +27,6 @@ base_packages:
     - git
     - make
     - unzip
-    - @development-tools
+    - '@Development tools'
     - ripgrep
     - xclip
