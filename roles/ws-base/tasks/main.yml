@@ -15,14 +15,6 @@
     upgrade: dist
   when: ansible_facts['os_family'] == "Debian"
 
-- name: Run the equivalent of "apt-get upgrade"
-  tags: always
-  ansible.builtin.apt:
-    update_cache: yes
-    name: "*"
-    state: latest
-  when: ansible_facts['os_family'] == "Debian"
-
 - name: Run the equivalent of "dnf upgrade"
   tags: always
   ansible.builtin.dnf5:
