@@ -1,26 +1,6 @@
 ---
 # Neovim setup - distro-specific
 
-# == Ubuntu / Pop!_OS / TUXEDO OS ==
-- name: Add Neovim PPA on Ubuntu-family systems
-  ansible.builtin.apt_repository:
-    repo: ppa:neovim-ppa/stable
-  when: ansible_facts['distribution'] in ['Ubuntu', 'Pop!_OS', 'TUXEDO OS']
-
-- name: Install Neovim and dependencies on Ubuntu-family systems
-  ansible.builtin.apt:
-    update_cache: yes
-    name:
-      - make
-      - gcc
-      - ripgrep
-      - unzip
-      - git
-      - xclip
-      - neovim
-    state: present
-  when: ansible_facts['distribution'] in ['Ubuntu', 'Pop!_OS', 'TUXEDO OS']
-
 # == Debian (stable) ==
 - name: Install dev tools and dependencies on Debian
   ansible.builtin.apt:
@@ -34,27 +14,30 @@
       - xclip
       - curl
     state: present
-  when: ansible_facts['distribution'] == "Debian"
+  when: ansible_facts['os_family'] == "Debian"
 
 - name: Download latest Neovim release on Debian
   ansible.builtin.get_url:
     url: https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
     dest: /tmp/nvim-linux-x86_64.tar.gz
     mode: '0644'
-  when: ansible_facts['distribution'] == "Debian"
+  when: ansible_facts['os_family'] == "Debian"
+
+- name: Remove existing Neovim directory
+  file:
+    path: /opt/nvim
+    state: absent
 
 - name: Extract and install Neovim binary to /opt on Debian
   ansible.builtin.unarchive:
     src: /tmp/nvim-linux-x86_64.tar.gz
     dest: /opt
     remote_src: yes
-    extra_opts: [--strip-components=1]
-    creates: /opt/bin/nvim
-  when: ansible_facts['distribution'] == "Debian"
+  when: ansible_facts['os_family'] == "Debian"
 
 - name: Symlink Neovim binary to /usr/local/bin
   ansible.builtin.file:
-    src: /opt/bin/nvim
+    src: /opt/nvim-linux64/bin/nvim
     dest: /usr/local/bin/nvim
     state: link
     force: true
